@@ -1,0 +1,11 @@
+# Go File
+go.sum
+
+# Log File
+logs/*.log
+
+# Binary File
+__debug*
+
+# Environment
+.env
