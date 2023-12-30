@@ -20,7 +20,7 @@ func SetupRouter() *gin.Engine {
 
 	router.POST("/login", controllers.Login)
 
-	router.OPTIONS("/renew-token", controllers.RenewToken)
+	router.HEAD("/renew-token", controllers.RenewToken)
 	v1 := router.Group("/v1").Use(middleware.AuthRequired())
 	{
 		v1.GET("/", func(ctx *gin.Context) {
