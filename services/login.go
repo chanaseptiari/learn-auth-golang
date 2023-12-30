@@ -6,27 +6,30 @@ import (
 	"github.com/chanaseptiari/learn-auth-golang/apps/initializer"
 	"github.com/chanaseptiari/learn-auth-golang/helper"
 	"github.com/chanaseptiari/learn-auth-golang/models"
+	"github.com/chanaseptiari/learn-auth-golang/repositories"
 	"github.com/gin-gonic/gin"
 )
 
 func LoginService(Input models.LoginInput, cnt *gin.Context) (int, interface{}) {
-	var check []models.LoginSearch
-
 	// Error First Validate
 	if err := cnt.ShouldBindJSON(&Input); err != nil {
-		return http.StatusBadRequest, helper.NewErrorResponse(http.StatusBadRequest, "Error", err.Error())
+		return http.StatusBadRequest, helper.NewErrorResponse(http.StatusBadRequest, "Validate", err.Error())
 	}
 
-	initializer.DB.Table("ms_auth").Where("Username = ? ", Input.Username).Take(&check)
+	// Check Username
+	resRepo, errRepo := repositories.GetUsername(initializer.DB, (*models.LoginSearch)(&Input))
+	if errRepo != nil {
+		return http.StatusOK, helper.NewErrorResponse(http.StatusOK, "Username Not Found", errRepo.Error())
+	}
 
-	err := helper.CheckHash(check[len(check)-1].Password, Input.Password)
+	err := helper.CheckHash(resRepo["Password"].(string), Input.Password)
 	if err == false {
 		// Wrong Password
-		return http.StatusOK, helper.NewErrorResponse(http.StatusOK, "Error", "Wrong password")
+		return http.StatusOK, helper.NewErrorResponse(http.StatusOK, "Password", "Wrong password")
 	}
 
 	token := helper.GenerateToken(Input.Username)
 
-	// Success
+	// // Success
 	return http.StatusOK, helper.NewSuccessResponse(http.StatusOK, "Success", token)
 }

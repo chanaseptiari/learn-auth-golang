@@ -8,6 +8,3 @@ type LoginSearch struct {
 	Username string
 	Password string
 }
-type ResponseLogin struct {
-	Token string
-}
