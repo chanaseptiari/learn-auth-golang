@@ -1,0 +1,9 @@
+# Vscode folder
+vscode/
+__debug*
+
+# Pretier
+.editorconfig
+
+# Readme File
+Readme.md

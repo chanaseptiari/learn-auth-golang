@@ -8,4 +8,7 @@ logs/*.log
 __debug*
 
 # Environment
-.env
+.env*
+!.env.sample
+
+
