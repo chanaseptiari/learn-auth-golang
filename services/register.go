@@ -17,14 +17,14 @@ func RegisterService(Input models.MsAuth, cnt *gin.Context) (int, interface{}) {
 
 	// Error First Validate
 	if err := cnt.ShouldBindJSON(&Input); err != nil {
-		return http.StatusBadRequest, helper.NewErrorResponse(http.StatusBadRequest, "Error", err.Error())
+		return http.StatusBadRequest, helper.NewErrorResponse(http.StatusBadRequest, "Validate", err.Error())
 	}
 
 	// Checking Username
 	pattern := `^[a-z]+[a-z0-9_\\.-]+$`
 	r, err := regexp.Compile(pattern)
 	if err != nil {
-		return http.StatusBadRequest, helper.NewErrorResponse(http.StatusBadRequest, "Error", err.Error())
+		return http.StatusBadRequest, helper.NewErrorResponse(http.StatusBadRequest, "Validate", err.Error())
 	}
 
 	// Check if the username matches the pattern.
@@ -39,7 +39,7 @@ func RegisterService(Input models.MsAuth, cnt *gin.Context) (int, interface{}) {
 
 	// Error Input
 	if err := repositories.ProsesRegister(initializer.DB, (*models.MsAuth)(&Input)); err != nil {
-		return http.StatusBadRequest, helper.NewErrorResponse(http.StatusBadRequest, "Error", err.Error())
+		return http.StatusBadRequest, helper.NewErrorResponse(http.StatusBadRequest, "Create Account", err.Error())
 	}
 
 	// Success
